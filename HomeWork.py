@@ -8,9 +8,5 @@ def get_days_from_today(date):
         return today_day.toordinal() - date.toordinal()
     except ValueError:
         print("Please enter in format YYYY-MM-DD: ")  
-        return get_days_from_today
 
-#     finally:
-#         return today_day.toordinal() - date.toordinal()
-# # today_day.toordinal() - date.toordinal()
 print(get_days_from_today("2022.11.11"))
