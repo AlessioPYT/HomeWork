@@ -3,10 +3,9 @@ import random
 import re
 
 '''
-first homework   #  py HomeWork.py
+first homework
 '''
 
-text_for_firstHW = "Please enter in format YYYY-MM-DD: "
 
 def get_days_from_today(date):
     try:
@@ -14,17 +13,16 @@ def get_days_from_today(date):
         today_day = datetime.now()
         return today_day.toordinal() - date.toordinal()
     except ValueError:
-        print(text_for_firstHW)  
+        print("Please enter in format YYYY-MM-DD: ")  
 print(get_days_from_today("2022-11-11"))
 
 
 
 
 '''
-second homework  #  py HomeWork.py
+second homework
 '''
 
-text_for_SecondHW = "You need to enter three numbers: minimum, maximum and quantity(must be <= maximum). Please try again: "
 
 def get_numbers_ticket(min, max, quantity):
     try:
@@ -32,7 +30,7 @@ def get_numbers_ticket(min, max, quantity):
         finally_numbers = list(sorted(random.sample(random_list_of_numbers, k=quantity)))
         return finally_numbers
     except ValueError:
-        print(text_for_SecondHW)
+        print("You need to enter three numbers: minimum, maximum and quantity(must be <= maximum). Please try again: ")
       
 lottery_numbers1 = get_numbers_ticket(10, 14, 6)
 print(f"Your lottery numbers: {lottery_numbers1}")
@@ -49,9 +47,9 @@ def normalize_phone (phone_number):
     UAcod = "+"
     new_number = re.search(r"^38", new_number1) # if number has 38 
     if new_number == None:
-        return UAcod1+new_number
+        return UAcod1+new_number1
     else:
-        return UAcod+new_number
+        return UAcod+new_number1
 
 
 raw_numbers = [
