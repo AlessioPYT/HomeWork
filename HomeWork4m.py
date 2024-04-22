@@ -30,7 +30,7 @@ print(f"Загальна сума заробітної плати: {total}, Се
 № _2_
 '''
 
-def get_cats (path):
+def get_cats_info (path):
     general_info = []
     try:
         with open(path, 'r') as file_cats: 
@@ -123,7 +123,7 @@ def main():
     contacts = {}
     print("Welcome to the assistant bot! Click the 'help' button to learn about all the commands.")
     while True:
-        print("help/close/exit/add/change/phone/show")
+        print("help/close/exit/add/change/phone/all")
         user_input = input("Enter a command: ")
         command, *args = parse_input(user_input)
 
@@ -138,14 +138,14 @@ def main():
             print("close\exit - if you want quit;")
             print("change - if you need to do some change;")
             print("phone - you need enter name to see phone number")
-            print("show - to see all list that you add")
+            print("all - to see all list that you add")
         elif command == "add":
             print(add_contact(args, contacts))
         elif command == "change":
             print(change_contact(args, contacts))
         elif command == "phone":
             print(show_phone(args, contacts))
-        elif command == "show":
+        elif command == "all":
             print(f"Here's all contacts that you've added: {contacts}. Do you need to make any changes?")
         else:
             print("Invalid command.")
