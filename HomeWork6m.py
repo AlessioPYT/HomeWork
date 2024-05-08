@@ -23,41 +23,35 @@ class Phone(Field):
 class Record:
     def __init__(self, name):
         self.name = Name(name)
-        self.list_phones = []
+        self.phones = []
 
-    def add_phone(self, phones):
-        self.list_phones.append(Phone(phones))
-        return self.list_phones
-    
+    def add_phone(self, phone):
+        self.phones.append(Phone(phone))
+
+    def remove_phone(self, phone):
+        self.phones = [p for p in self.phones if p.value != phone]
+
     def edit_phone(self, old_phone, new_phone):
-        for num, phone in enumerate(self.list_phones):
-            if phone == old_phone:
-                if Phone.valid_phone(new_phone):
-                    self.list_phones[num] = Phone(new_phone)
-                    return new_phone
-                else:
-                    raise ValueError("New phone number is not valid.")
-        raise ValueError("Phone number to edit not found.")
+        try:
+            index = next(i for i, p in enumerate(self.phones) if p.value == old_phone)
+            self.phones[index] = Phone(new_phone)
+        except StopIteration:
+            print("Phone number not found.")
 
-    def find_phone(self, phones):
-        return print(self.phones.get(Phone(phones)))
-    
-    def delete_phone(self, phone_to_delete):
-        for i, phone in enumerate(self.phones): 
-            if phone.value == phone_to_delete:
-                del self.phones[i]
-                return phone_to_delete
-        raise ValueError("Phone number to delete not found.")
+    def find_phone(self, phone):
+        for p in self.phones:
+            if p.value == phone:
+                return phone
+        return None
 
     def __str__(self):
-        return f"Contact name: {self.name.value}, phones: {'; '.join(p.value for p in self.phones)}"
+        return f"Contact name: {self.name.value}, phones: {'; '.join(str(p) for p in self.phones)}"
 
 class AddressBook(UserDict):
-    phone = Phone() 
-    def add_record(self, name):
-        if name not in self.data:
-            self.data[name] = Record(name)
-            self.data[name].add_phone(AddressBook.phone)
+
+    def add_record(self, record):
+        if record.name.value not in self.data:
+            self.data[record.name.value] = record
         else:
             return f"Name is already in list!"
 
@@ -69,3 +63,37 @@ class AddressBook(UserDict):
             del self.data[name]
         else:
             raise ValueError("Record not found in the address book.")
+        
+if __name__ == '__main__':
+# Створення нової адресної книги
+    book = AddressBook()
+
+    # Створення запису для John
+    john_record = Record("John")
+    john_record.add_phone("1234567890")
+    john_record.add_phone("5555555555")
+
+    # Додавання запису John до адресної книги
+    book.add_record(john_record)
+
+    # Створення та додавання нового запису для Jane
+    jane_record = Record("Jane")
+    jane_record.add_phone("9876543210")
+    book.add_record(jane_record)
+
+    # Виведення всіх записів у книзі
+    for name, record in book.data.items():
+        print(record)
+
+    # Знаходження та редагування телефону для John
+    john = book.find("John")
+    john.edit_phone("1234567890", "1112223333")
+
+    print(john)  # Виведення: Contact name: John, phones: 1112223333; 5555555555
+
+    # Пошук конкретного телефону у записі John
+    found_phone = john.find_phone("5555555555")
+    print(f"{john.name}: {found_phone}")  # Виведення: 5555555555
+
+    # Видалення запису Jane
+    book.delete("Jane")
