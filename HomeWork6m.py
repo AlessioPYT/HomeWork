@@ -18,7 +18,8 @@ class Phone(Field):
         super().__init__(phone)
 
     def valid_phone(self, phone):
-         return len(phone) == 10
+        if isinstance(phone, str) and phone.isdigit(): 
+            return len(phone) == 10
 
 class Record:
     def __init__(self, name):
@@ -32,17 +33,19 @@ class Record:
         self.phones = [p for p in self.phones if p.value != phone]
 
     def edit_phone(self, old_phone, new_phone):
-        try:
-            index = next(i for i, p in enumerate(self.phones) if p.value == old_phone)
-            self.phones[index] = Phone(new_phone)
-        except StopIteration:
-            print("Phone number not found.")
+        phone = self.find_phone(old_phone)
+        if not phone:
+            raise ValueError
+        index = self.phones.index(phone)
+        self.phones[index] = Phone(new_phone)
+
 
     def find_phone(self, phone):
         for p in self.phones:
             if p.value == phone:
-                return phone
+                return p
         return None
+    
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(str(p) for p in self.phones)}"
@@ -56,7 +59,7 @@ class AddressBook(UserDict):
             return f"Name is already in list!"
 
     def find(self, name):
-        return self.data[name] if name in self.data else None
+        return self.data.get(name)
 
     def delete(self, name):
         if name in self.data:
@@ -97,3 +100,5 @@ if __name__ == '__main__':
 
     # Видалення запису Jane
     book.delete("Jane")
+
+
